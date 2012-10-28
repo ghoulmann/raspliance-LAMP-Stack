@@ -1,0 +1,46 @@
+#!/bin/bash -ex
+
+#Patches Raspliance Core to approximately match TKL LAMP 12.0 (Squeeze). By Rik Goldman, with utter reliance on code.turnkeylinux.org, featuring code by Alon and Liraz.
+
+#Check for Root
+
+LUID=$(id -u)
+if [[ $LUID -ne 0 ]]; then
+echo "$0 must be run as root"
+exit 1
+fi
+
+#set hostname to lamp
+
+HOSTNAME=lamp
+echo "$HOSTNAME" > /etc/hostname
+sed -i "s|127.0.1.1 \(.*\)|127.0.1.1 $HOSTNAME|" /etc/hostname
+
+
+install ()
+{
+	apt-get update
+	DEBIAN_FRONTEND=noninteractive apt-get -y \
+        -o DPkg::Options::=--force-confdef \
+        -o DPkg::Options::=--force-confold \
+        install $@
+}
+
+install mysql-server \
+	php5-common \
+	php5-mcrypt \
+	php5-mysql \
+	php5-xcache \
+	postfix \
+	python-mysqldb \
+	libapache2-mod-perl2 \
+	libapache2-mod-php5 \
+	libapache2-mod-python \
+	apache2 \
+	apache2-mpm-prefork \
+	apache2-utils \
+	apache2.2-bin \
+	apache2.2-commony
+#Clean
+apt-get clean
+
