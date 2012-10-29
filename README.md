@@ -50,4 +50,4 @@ Apply the patch:
 
   cd raspliance-LAMP-Stack
 
-  tklpatch / Raspliance-LAMP-Stack/
+  tklpatch-apply / Raspliance-LAMP-Stack/
